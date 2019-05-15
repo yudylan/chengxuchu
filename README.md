@@ -7,7 +7,9 @@ self.state_dim = 3      ##输入是离散的数据，包括负荷需求、光伏
         self.load = pd.read_csv('load.csv')
         self.pv = pd.read_csv('pv.csv')
 
-def reset(self):
+  
+    def reset(self):
+   
         self.current_soc = 0.6
         self.state = [self.load, self.pv, self.current_soc]
         self.action = [self.pd, self.pb]
