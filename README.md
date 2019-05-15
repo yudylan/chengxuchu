@@ -4,8 +4,9 @@
 self.state_dim = 3      ##输入是离散的数据，包括负荷需求、光伏发电量、SOC
   self.action_dim = 100    ##内燃机发电和电池充放电分别离散成10个动作
 读取当前时刻的load和pv数据：
-        self.load = pd.read_csv('load.csv')
-        self.pv = pd.read_csv('pv.csv')
+      
+      self.load = pd.read_csv('load.csv')
+      self.pv = pd.read_csv('pv.csv')
 
   
     def reset(self):
