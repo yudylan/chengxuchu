@@ -36,16 +36,17 @@ self.state_dim = 3      ##输入是离散的数据，包括负荷需求、光伏
 
 reward由两部分组成：第一大部分是成本(reward_chengben)，包括内燃机发电的成本和从主电网购电的成本（单价分别假设为了10和16）；第二大部分是蓄电池的处罚金额(reward_penalty)，将蓄电池的soc设置在[0.2,0.8]的范围内，如果超过该范围，将产生处罚成本。
 
-reward_chengben = 10 * pd_output + 16 * pg_output       ###成本
+    reward_chengben = 10 * pd_output + 16 * pg_output       ###成本
 
-if abs(self.current_soc - 0.5) > 0.3:
+    if abs(self.current_soc - 0.5) > 0.3:
        reward_penalty = 300.0 * (abs(self.current_soc - 0.5) + 0.7)    ###处罚金额
 
 
-reward = -(reward_penalty + reward_chengben) / 100.0   ##reward
+    reward = -(reward_penalty + reward_chengben) / 100.0   ##reward
 
-huafei = huafei + env.pdpower(action) * 10 + pg_output * 16  ###文中的花费，本文目的即为花费最小
+    huafei = huafei + env.pdpower(action) * 10 + pg_output * 16  ###文中的花费，本文目的即为花费最小
 
 其中， SOC的更新语句为：
-     self.current_soc = self.current_soc - pb_output / 200   ###蓄电池容量为200KW
+
+    self.current_soc = self.current_soc - pb_output / 200   ###蓄电池容量为200KW
 
