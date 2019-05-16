@@ -71,7 +71,7 @@ class Agent():
         Q_action = tf.reduce_sum(tf.mul(self.Q_value, self.action_input), reduction_indices = 1)
         #compute loss
         self.cost = tf.reduce_mean(tf.square(self.y_input - Q_action))
-        tf.scalar_summary("loss", self.cost)
+        tf.summary.scalar("loss", self.cost)
         global merged_summary_op
         merged_summary_op = tf.merge_all_summaries()
         #optimize training process automatically
