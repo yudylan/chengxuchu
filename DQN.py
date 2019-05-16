@@ -181,7 +181,7 @@ def main():
         if episode % 100 == 0:
             total_reward = 0
             huafei = 0.0
-            for i in range(5):
+            for i in range(TEST):
                 state = env.reset()
                 for j in range(STEP):
                     action = agent.action(state)
