@@ -166,8 +166,9 @@ def main():
     huafei_track = []
     pg_output = []
     for episode in range(EPISODE):
-        #initialize task
+        #initialize task  迭代学习次数为episodes，每次迭代学习时均需要初始化环境
         state = env.reset()
+        ##STEP是每次迭代学习（episode）的步长
         for step in range(STEP):
             ##action = agent.egreedy_action(env.soc_drop, state)
             action = agent.egreedy_action(state)
