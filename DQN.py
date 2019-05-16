@@ -185,11 +185,12 @@ def main():
                 state = env.reset()
                 for j in range(STEP):
                     action = agent.action(state)
-                    #########本文的##########################################
-                    #power = power + env.icepower(action)
+                    
                     huafei = huafei + env.pdpower(action) * 10 + pg_output * 16 
-                    next_state, reward, _ = env.step(action)
+                    next_state, reward, done, _ = env.step(action)
                     total_reward += reward
+                    if done:
+                        break
          
             ave_reward = total_reward / 5
             print ('episode: ', episode, 'Evaluation on Average Reward:' , ave_reward)
