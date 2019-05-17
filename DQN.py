@@ -25,7 +25,7 @@ class Agent():
         #init some parameter
         self.time_step = 0
         self.epsilon = INITIAL_EPSILON
-        self.state_dim = 3      ##输入是离散的数据，包括负荷需求、光伏发电量、SOC
+        self.state_dim = 3      #状态空间是连续的，状态空间是个3维向量，包括负荷需求、光伏发电量、SOC，所以大小为3
         self.action_dim = 100    ##内燃机发电和电池充放电分别离散成10个动作
 
         self.create_Q_network()
