@@ -12,23 +12,24 @@ class Environment():
     
     s_dim = 2
     a_dim = 3
-    a_bound[0] = [-500,500]    ###出力者B的出力上下限,可为负值，即可做正功，也可以做负功
-    a_bound[1] = [0,800]    ###出力者C的出力上下限
-    a_bound[2] = [0,1000]    ###出力者D的出力上下限
+    a_bound = [-1,1]
+    #a_bound[0] = [-500,500]    ###出力者B的出力上下限,可为负值，即可做正功，也可以做负功
+    #a_bound[1] = [0,800]    ###出力者C的出力上下限
+    #a_bound[2] = [0,1000]    ###出力者D的出力上下限
     fb_output = []
     fc_output = []
     fd_output = []
     def __init__(self):
-        self.current_b = 0.6
+        self.current_soc = 0.6
         self.time_step = 0
-        #CAPACITY = 2000   ###出力者B的容量为2000
-        self.load = pd.read_csv('load.csv')   ###load为总力需求减去出力者A出力后得到
+        self.load = pd.read_csv('load.csv')   ###load为总电量需求
+        self.pv = pd.read_csv('pv.csv')   ###pv为光伏发电量
         self.reset()
         
 
     def reset(self):
         self.current_b = 0.6
-        self.state = [self.load, self.current_b]
+        self.state = [self.load, self.pv, self.current_b]
         self.action = [self.fb_output, self.fc_output, self.fd_output]
 
         return np.array(self.state)
@@ -36,12 +37,12 @@ class Environment():
         
     def fbpower(self, action):
         #fb_output = action[0] * self.load      ####若将动作进行归一化了
-        fb_output = action[0]      ####未将动作归一化
+        fb_output = action[0] * capacityb      
         return fb_output
         
     def fcpower(self, action):
         #fc_output = action[1] * self.load      ####若将动作进行归一化了
-        fc_output = action[1]      ####未将动作归一化
+        fc_output = action[1] * capacityc    
         return fc_output
         
     def fdpower(self, action):
