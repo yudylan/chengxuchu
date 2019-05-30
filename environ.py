@@ -47,17 +47,17 @@ class Environment():
         return np.array(self.action)
         
     def fbpower(self, action):
-        #fb_output = action[0] * capacityb        ####若将出力范围统一变换到[-1,1]，capacityb为发电机出力的上下界的差值,等于1200
+        #fb_output += action[0] * capacityb        ####若将出力范围统一变换到[-1,1]，capacityb为发电机出力的上下界的差值,等于1200
         fb_output = action[0]        ###action[0]直接表示发电机的发电量
         return fb_output
         
     def fcpower(self, action):
-        #fc_output = action[1] * capacityc        ####若将出力范围统一变换到[-1,1]，capacityc为蓄电池出力的上下界的差值,等于6000
+        #fc_output += action[1] * capacityc        ####若将出力范围统一变换到[-1,1]，capacityc为蓄电池出力的上下界的差值,等于6000
         fc_output = action[1]        #action[1]直接表示蓄电池的出力值，即充电值或放电值，，若为正，则代表蓄电池放电，若该值为负，则代表给电池充电
         return fc_output
         
     def fdpower(self, action):
-        #fd_output = action[2] * capacityd        ####若将出力范围统一变换到[-1,1]，capacityd为蓄电池出力的上下界的差值
+        #fd_output = +action[2] * capacityd        ####若将出力范围统一变换到[-1,1]，capacityd为蓄电池出力的上下界的差值
         fd_output = action[2]      ###action[2]直接表示上级电网的出力值，为正时，是从上级电网的买电量；为负时，是卖给上级电网的电量
         return fd_output   
         
