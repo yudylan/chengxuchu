@@ -13,8 +13,8 @@ class Environment():
     s_dim = 3
     a_dim = 3
     #a_bound = [-1,1]
-    a_bound[0] = [0,1200]    ###发电机的出力上下限,也就是发电机的最大功率是1200KW
-    a_bound[1] = [-800,800]    ###蓄电池的出力上下限，最大功率是800KW，也就是充电最大功率是800KW，放电最大功率也是800KW
+    a_bound[0] = [0,800]    ###发电机的出力上下限,也就是发电机的最大功率是1200KW
+    a_bound[1] = [-600,600]    ###蓄电池的出力上下限，最大功率是800KW，也就是充电最大功率是800KW，放电最大功率也是800KW
     a_bound[2] = [-3000,3000]    ###上级电网出力的上下限，最大功率是3000KW，，也就是买电的上限是3000KW，卖电的上限也是3000KW
     fb_output = []
     fc_output = []
@@ -47,17 +47,17 @@ class Environment():
         return np.array(self.action)
         
     def fbpower(self, action):
-        #fb_output += action[0] * capacityb        ####若将出力范围统一变换到[-1,1]，capacityb为发电机出力的上下界的差值,等于1200
+        #fb_output += action[0] * capacityb        ####若将出力范围统一变换到[-1,1]，capacityb为发电机出力的上下界的差值,等于800
         fb_output = action[0]        ###action[0]直接表示发电机的发电量
         return fb_output
         
     def fcpower(self, action):
-        #fc_output += action[1] * capacityc        ####若将出力范围统一变换到[-1,1]，capacityc为蓄电池出力的上下界的差值,等于6000
+        #fc_output += action[1] * capacityc        ####若将出力范围统一变换到[-1,1]，capacityc为蓄电池出力的上下界的差值,等于1200
         fc_output = action[1]        #action[1]直接表示蓄电池的出力值，即充电值或放电值，，若为正，则代表蓄电池放电，若该值为负，则代表给电池充电
         return fc_output
         
     def fdpower(self, action):
-        #fd_output = +action[2] * capacityd        ####若将出力范围统一变换到[-1,1]，capacityd为蓄电池出力的上下界的差值
+        #fd_output = +action[2] * capacityd        ####若将出力范围统一变换到[-1,1]，capacityd为蓄电池出力的上下界的差值，等于6000
         fd_output = action[2]      ###action[2]直接表示上级电网的出力值，为正时，是从上级电网的买电量；为负时，是卖给上级电网的电量
         return fd_output   
         
