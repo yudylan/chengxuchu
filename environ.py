@@ -10,7 +10,7 @@ import pandas as pd
 
 class Environment():
     
-    s_dim = 2
+    s_dim = 3
     a_dim = 3
     #a_bound = [-1,1]
     a_bound[0] = [0,1200]    ###发电机的出力上下限,也就是发电机的最大功率是1200KW
@@ -23,10 +23,16 @@ class Environment():
         self.time_step = 0
         
         self.current_soc = 0.6
-        self.load = pd.read_csv('load.csv')   ###load为总电量需求  ，数据读取需要切片
-        self.pv = pd.read_csv('pv.csv')   ###pv为光伏发电量
-        self.dianjiabuy = pd.read_csv('dianjiabuy.csv')   ##dianjiabuy为从上级电网买1度电的电价，为分时电价，也就是一天的电价会随时间变化而变化
-        self.dianjiasell = pd.read_csv('dianjiasell.csv')   ##dianjiasell为卖给上级电网1度电的电价，，为也是分时电价
+        #self.load = pd.read_csv('load.csv', index_col=0)   ###load为总电量需求 
+        #self.pv = pd.read_csv('pv.csv')   ###pv为光伏发电量
+        #self.dianjiabuy = pd.read_csv('dianjiabuy.csv')   ##dianjiabuy为从上级电网买1度电的电价，为分时电价，也就是一天的电价会随时间变化而变化
+        #self.dianjiasell = pd.read_csv('dianjiasell.csv')   ##dianjiasell为卖给上级电网1度电的电价，，为也是分时电价
+        
+        self.load = pd.read_csv('shuju.csv', index_col=0)   ###表格的第1列为load，为总电量需求 
+        self.pv = pd.read_csv('shuju.csv', index_col=1)   ###表格的第2列为pv,为光伏发电量
+        self.dianjiabuy = pd.read_csv('shuju.csv', index_col=2)   ##表格的第2列为dianjiabuy,为从上级电网买1度电的电价，为分时电价
+        self.dianjiasell = pd.read_csv('shuju.csv', index_col=3)   ##表格的第3列为dianjiasell,为卖给上级电网1度电的电价，，为也是分时电价
+        
         ##  峰时段为10:00-15:00、18:00-21:00；平时段为07:00-10:00、15:00-18:00、21:00-23:00；谷时段为00:00-07:00、23:00-24:00
        
         self.reset()
@@ -41,12 +47,12 @@ class Environment():
         return np.array(self.action)
         
     def fbpower(self, action):
-        #fb_output = action[0] * capacityb        ####若将出力范围统一变换到[-1,1]，capacityb为发电机出力的上下界的差值
+        #fb_output = action[0] * capacityb        ####若将出力范围统一变换到[-1,1]，capacityb为发电机出力的上下界的差值,等于1200
         fb_output = action[0]        ###action[0]直接表示发电机的发电量
         return fb_output
         
     def fcpower(self, action):
-        #fc_output = action[1] * capacityc        ####若将出力范围统一变换到[-1,1]，capacityc为蓄电池出力的上下界的差值
+        #fc_output = action[1] * capacityc        ####若将出力范围统一变换到[-1,1]，capacityc为蓄电池出力的上下界的差值,等于6000
         fc_output = action[1]        #action[1]直接表示蓄电池的出力值，即充电值或放电值，，若为正，则代表蓄电池放电，若该值为负，则代表给电池充电
         return fc_output
         
@@ -67,7 +73,7 @@ class Environment():
         fd_output = self.fdpower(action)
         
         #########蓄电池soc的更新公式
-        self.current_c = self.current_soc - fc_output / capacity  ##蓄电池的容量为capacity
+        self.current_soc = self.current_soc - fc_output / capacity  ##蓄电池的容量为capacity
         
         if fd_output >= 0:
             reward_chengben = 10 * fb_output *fb_output + dianjiabuy * fd_output   ##10为发电机发1度电的成本，dianjiabuy为从上级电网买1度电的成本
