@@ -81,9 +81,9 @@ class Environment():
             reward_chengben = 0.32 * fb_output *fb_output + dianjiasell * fd_output   ##0.32为发电机发1度电的成本系数，dianjiasell为卖1度电的利润
         
         if abs(self.current_b - 0.5) > 0.3:
-            reward_penalty = 300.0 * (abs(self.current_b - 0.5) + 0.7)    ##将soc限制在[0.2,0.8]的范围内，若超出此范围，则有处罚成本
+            reward_penalty =100.0 * (abs(self.current_b - 0.5) + 0.7)    ##将soc限制在[0.2,0.8]的范围内，若超出此范围，则有处罚成本
             
-        reward = -(reward_penalty + reward_chengben) / 10000.0      ##总的reward，除以10000是为了正则化
+        reward = -(reward_penalty + reward_chengben) / 1000.0      ##总的reward，除以10000是为了正则化
 
 
         self.time_step = self.time_step + 1
