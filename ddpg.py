@@ -124,8 +124,8 @@ class DDPG(object):
 ###############################  training  ####################################
 
 env = Environment()         ##自己的环境
-####env = env.unwrapped      ###去掉应该不影响
-####env.seed(1)             ###去掉应该不影响
+####env = env.unwrapped      ###去掉
+####env.seed(1)             ###去掉
 
 s_dim = env.s_dim
 a_dim = env.a_dim
@@ -135,7 +135,7 @@ ddpg = DDPG(a_dim, s_dim, a_bound)
 
 huafei_track = []
 
-var = 3  # control exploration   ####？？？？？ 3是什么意思呢？？
+var = 3  # control exploration 
 t1 = time.time()
 for episode in range(MAX_EPISODES):
     s = env.reset()
@@ -146,7 +146,7 @@ for episode in range(MAX_EPISODES):
 
         # Add exploration noise
         a = ddpg.choose_action(s)
-        a = np.clip(np.random.normal(a, var), -2, 2)    # add randomness to action selection for exploration
+        a = np.clip(np.random.normal(a, var), -1, 1)    # add randomness to action selection for exploration给动作加的随机噪声
         s_, r, done, info = env.step(a)
 
         ddpg.store_transition(s, a, r / 10, s_)
@@ -161,8 +161,8 @@ for episode in range(MAX_EPISODES):
             print('Episode:', episode, ' Reward: %i' % int(ep_reward), 'Explore: %.2f' % var, )
             # if ep_reward > -300:RENDER = True
             break
-        
-    if episode % 10 == 0:
+###############################  test  ####################################        
+    if episode % 100 == 0:
       total_reward = 0
       huafei = 0    ###花费的成本
       for i in range(10):
@@ -170,7 +170,7 @@ for episode in range(MAX_EPISODES):
         for j in range(MAX_EP_STEPS):
           env.render()
           action = ddpg.choose_action(state) # direct action for test
-          huafei = huafei + env.fcpower(action) * 10 + env.fdpower(action) * 16  ###定义的总的花费的成本，与C和D有关
+          huafei = huafei + env.fcpower(action) * env.fcpower(action) * 10 + env.fdpower(action) * 16  ###定义的总的花费的成本
           state,reward,done,_ = env.step(action)
           total_reward += reward
           if done:
