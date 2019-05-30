@@ -120,6 +120,14 @@ class DDPG(object):
             b1 = tf.get_variable('b1', [1, n_l1], trainable=trainable)
             net = tf.nn.relu(tf.matmul(s, w1_s) + tf.matmul(a, w1_a) + b1)
             return tf.layers.dense(net, 1, trainable=trainable)  # Q(s,a)
+        
+    def save(self):
+        saver = tf.train.Saver()
+        saver.save(self.sess, './params', write_meta_graph=False)  ##保存训练好的模型
+
+    def restore(self):
+        saver = tf.train.Saver()
+        saver.restore(self.sess, './params')    ##提取训练好的模型
 
 ###############################  training  ####################################
 
@@ -188,10 +196,4 @@ for episode in range(MAX_EPISODES):
       
 print('Running time: ', time.time() - t1)
 
-    def save(self):
-        saver = tf.train.Saver()
-        saver.save(self.sess, './params', write_meta_graph=False)  ##保存训练好的模型
 
-    def restore(self):
-        saver = tf.train.Saver()
-        saver.restore(self.sess, './params')    ##提取训练好的模型
