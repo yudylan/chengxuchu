@@ -172,7 +172,7 @@ for episode in range(MAX_EPISODES):
           action = ddpg.choose_action(state) # direct action for test
           if env.fdpower(action) >= 0:
             huafei = huafei + env.fbpower(action) * env.fbpower(action) * 0.32 + env.fdpower(action) * dianjiabuy  ###定义的总的花费的成本
-          else
+          else：
             huafei = huafei + env.fbpower(action) * env.fbpower(action) * 0.32 + env.fdpower(action) * dianjiabuy  ###定义的总的花费的成本
         
           state,reward,done,_ = env.step(action)
