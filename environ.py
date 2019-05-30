@@ -23,15 +23,15 @@ class Environment():
         self.time_step = 0
         
         self.current_soc = 0.6
-        #self.load = pd.read_csv('load.csv', index_col=0)   ###load为总电量需求 
+        #self.load = pd.read_csv('load.csv', index_col=0)   ###load为总电量需求，，这样4个表格要做4次切片
         #self.pv = pd.read_csv('pv.csv')   ###pv为光伏发电量
         #self.dianjiabuy = pd.read_csv('dianjiabuy.csv')   ##dianjiabuy为从上级电网买1度电的电价，为分时电价，也就是一天的电价会随时间变化而变化
         #self.dianjiasell = pd.read_csv('dianjiasell.csv')   ##dianjiasell为卖给上级电网1度电的电价，，为也是分时电价
         
-        self.load = pd.read_csv('shuju.csv', index_col=0)   ###表格的第1列为load，为总电量需求 
-        self.pv = pd.read_csv('shuju.csv', index_col=1)   ###表格的第2列为pv,为光伏发电量
-        self.dianjiabuy = pd.read_csv('shuju.csv', index_col=2)   ##表格的第2列为dianjiabuy,为从上级电网买1度电的电价，为分时电价
-        self.dianjiasell = pd.read_csv('shuju.csv', index_col=3)   ##表格的第3列为dianjiasell,为卖给上级电网1度电的电价，，为也是分时电价
+        self.load = pd.read_csv('shuju.csv', index_col=0)   ###表格shuju的第1列为load，为总电量需求 ，，这样总共2个表格做两次切片就行了
+        self.pv = pd.read_csv('shuju.csv', index_col=1)   ###表格shuju的第2列为pv,为光伏发电量
+        self.dianjiabuy = pd.read_csv('dianjia.csv', index_col=0)   ##表格dianjia的第1列为dianjiabuy,为从上级电网买1度电的电价，为分时电价
+        self.dianjiasell = pd.read_csv('dianjia.csv', index_col=1)   ##表格dianjia的第2列为dianjiasell,为卖给上级电网1度电的电价，，为也是分时电价
         
         ##  电价的峰时段为10:00-15:00、18:00-21:00；平时段为07:00-10:00、15:00-18:00、21:00-23:00；谷时段为00:00-07:00、23:00-24:00
        
@@ -76,9 +76,9 @@ class Environment():
         self.current_soc = self.current_soc - fc_output / capacity  ##蓄电池的容量为capacity
         
         if fd_output >= 0:
-            reward_chengben = 10 * fb_output *fb_output + dianjiabuy * fd_output   ##10为发电机发1度电的成本，dianjiabuy为从上级电网买1度电的成本
+            reward_chengben = 0.32 * fb_output *fb_output + dianjiabuy * fd_output   ##0.32为发电机发1度电的成本系数，dianjiabuy为从上级电网买1度电的成本
         eles
-            reward_chengben = 10 * fb_output *fb_output + dianjiasell * fd_output   ##10为发电机发1度电的成本，dianjiasell为卖1度电的利润
+            reward_chengben = 0.32 * fb_output *fb_output + dianjiasell * fd_output   ##0.32为发电机发1度电的成本系数，dianjiasell为卖1度电的利润
         
         if abs(self.current_b - 0.5) > 0.3:
             reward_penalty = 300.0 * (abs(self.current_b - 0.5) + 0.7)    ##将soc限制在[0.2,0.8]的范围内，若超出此范围，则有处罚成本
