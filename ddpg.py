@@ -36,7 +36,7 @@ TAU = 0.01      # soft replacement
 MEMORY_CAPACITY = 10000
 BATCH_SIZE = 32
 
-TEST = 10   #######自己加的
+TEST = 10   #######自己加的，表示测试次数
 
 RENDER = False
 
@@ -170,7 +170,11 @@ for episode in range(MAX_EPISODES):
         for j in range(MAX_EP_STEPS):
           env.render()
           action = ddpg.choose_action(state) # direct action for test
-          huafei = huafei + env.fcpower(action) * env.fcpower(action) * 10 + env.fdpower(action) * 16  ###定义的总的花费的成本
+          if env.fdpower(action) >= 0:
+            huafei = huafei + env.fcpower(action) * env.fcpower(action) * 10 + env.fdpower(action) * dianjiabuy  ###定义的总的花费的成本
+          else
+            huafei = huafei + env.fcpower(action) * env.fcpower(action) * 10 + env.fdpower(action) * dianjiabuy  ###定义的总的花费的成本
+        
           state,reward,done,_ = env.step(action)
           total_reward += reward
           if done:
