@@ -31,8 +31,8 @@ class Environment():
         
         self.load = pd.read_csv('shuju.csv', index_col=0)   ###表格shuju的第1列为load，为总电量需求 ，，共24000行，这样总共2个表格做两次切片就行了
         self.pv = pd.read_csv('shuju.csv', index_col=1)   ###表格shuju的第2列为pv,为光伏发电量，共24000行
-        self.dianjiabuy = pd.read_csv('dianjia.csv', index_col=0)   ##表格dianjia的第1列为dianjiabuy,为从上级电网买1度电的电价，为分时电价，共24行
-        self.dianjiasell = pd.read_csv('dianjia.csv', index_col=1)   ##表格dianjia的第2列为dianjiasell,为卖给上级电网1度电的电价，为也是分时电价，共24行
+        self.dianjiabuy = pd.read_csv('dianjiabuy.csv')   ##表格dianjiabuy为从上级电网买1度电的电价，为分时电价，共24行
+        self.dianjiasell = pd.read_csv('dianjiasell.csv)   ##表格dianjiasell为卖给上级电网1度电的电价，为也是分时电价，共24行
         
         ##  电价的峰时段为10:00-15:00、18:00-21:00；平时段为07:00-10:00、15:00-18:00、21:00-23:00；谷时段为00:00-07:00、23:00-24:00
        
