@@ -135,7 +135,7 @@ ddpg = DDPG(a_dim, s_dim, a_bound)
 
 huafei_track = []
 
-var = 3  # control exploration 
+var = 3  # control exploration  要给动作加入方差为3的正态分布的噪音
 t1 = time.time()
 for episode in range(MAX_EPISODES):
     s = env.reset()
@@ -146,13 +146,13 @@ for episode in range(MAX_EPISODES):
 
         # Add exploration noise
         a = ddpg.choose_action(s)
-        a = np.clip(np.random.normal(a, var), -1, 1)    # add randomness to action selection for exploration给动作加的随机噪声
+        a = np.clip(np.random.normal(a, var), -1, 1)    # add randomness to action selection for exploration给动作加的随机噪声,-1,1分别为动作的上下限
         s_, r, done, info = env.step(a)
 
         ddpg.store_transition(s, a, r / 10, s_)
 
         if ddpg.pointer > MEMORY_CAPACITY:
-            var *= .9995    # decay the action randomness
+            var *= .9995    # decay the action randomness随着训练的进行，模型慢慢会收敛，所以也要慢慢减小噪音，所以采样的正态分布的方差也需要慢慢变小一些
             ddpg.learn()
 
         s = s_
@@ -171,9 +171,9 @@ for episode in range(MAX_EPISODES):
           env.render()
           action = ddpg.choose_action(state) # direct action for test
           if env.fdpower(action) >= 0:
-            huafei = huafei + env.fcpower(action) * env.fcpower(action) * 10 + env.fdpower(action) * dianjiabuy  ###定义的总的花费的成本
+            huafei = huafei + env.fbpower(action) * env.fbpower(action) * 10 + env.fdpower(action) * dianjiabuy  ###定义的总的花费的成本
           else
-            huafei = huafei + env.fcpower(action) * env.fcpower(action) * 10 + env.fdpower(action) * dianjiabuy  ###定义的总的花费的成本
+            huafei = huafei + env.fbpower(action) * env.fbpower(action) * 10 + env.fdpower(action) * dianjiabuy  ###定义的总的花费的成本
         
           state,reward,done,_ = env.step(action)
           total_reward += reward
@@ -187,3 +187,11 @@ for episode in range(MAX_EPISODES):
       print ('episode: ', episode, 'Huafei:' , ave_huafei)
       
 print('Running time: ', time.time() - t1)
+
+    def save(self):
+        saver = tf.train.Saver()
+        saver.save(self.sess, './params', write_meta_graph=False)  ##保存训练好的模型
+
+    def restore(self):
+        saver = tf.train.Saver()
+        saver.restore(self.sess, './params')    ##提取训练好的模型
