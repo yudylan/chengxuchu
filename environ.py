@@ -81,7 +81,7 @@ class Environment():
         
         if fd_output >= 0:
             reward_chengben = 0.32 * fb_output *fb_output + dianjiabuy * fd_output   ##0.32为发电机发1度电的成本系数，dianjiabuy为从上级电网买1度电的成本
-        eles
+        els
             reward_chengben = 0.32 * fb_output *fb_output + dianjiasell * fd_output   ##0.32为发电机发1度电的成本系数，dianjiasell为卖1度电的利润
         
         if abs(self.current_b - 0.5) > 0.3:
