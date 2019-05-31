@@ -1,4 +1,4 @@
-"""
+ """
 Deep Deterministic Policy Gradient (DDPG), Reinforcement Learning.
 DDPG is Actor Critic based algorithm.
 Pendulum example.
@@ -181,7 +181,7 @@ for episode in range(MAX_EPISODES):
           if env.fdpower(action) >= 0:
             huafei = huafei + env.fbpower(action) * env.fbpower(action) * 0.32 + env.fdpower(action) * self.dianjiabuy  ###定义的总的花费的成本
           else：
-            huafei = huafei + env.fbpower(action) * env.fbpower(action) * 0.32 + env.fdpower(action) * self.dianjiabuy  ###定义的总的花费的成本
+            huafei = huafei + env.fbpower(action) * env.fbpower(action) * 0.32 + env.fdpower(action) * self.dianjiasell  ###定义的总的花费的成本
         
           state,reward,done,_ = env.step(action)
           total_reward += reward
